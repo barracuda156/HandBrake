@@ -14,7 +14,7 @@ ifneq ($(HAS.bz2),1)
 endif
 endif
 
-ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
+ifneq (,$(filter $(HOST.system),cygwin mingw))
     MODULES += contrib/freetype
     MODULES += contrib/fribidi
     MODULES += contrib/harfbuzz
