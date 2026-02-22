@@ -33,6 +33,11 @@ option('qsv',
        value: 'disabled',
        description: 'Enable QSV encoder')
 
+option('vt',
+       type: 'feature',
+       value: 'auto',
+       description: 'Enable VideoToolbox/Metal hardware acceleration support')
+
 option('x265',
        type: 'feature',
        value: 'disabled',

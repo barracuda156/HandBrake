@@ -3280,7 +3280,7 @@ static int ParseOptions( int argc, char ** argv )
                     }
                     else if (!strcmp(optarg, "videotoolbox"))
                     {
-#if defined( __APPLE_CC__ )
+#if defined(__APPLE_CC__) && !defined(HB_DISABLE_VT)
                         if (__builtin_available(macOS 13, *))
                         {
                             hw_decode = HB_DECODE_VIDEOTOOLBOX;

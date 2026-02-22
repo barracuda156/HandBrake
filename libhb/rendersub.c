@@ -1130,7 +1130,7 @@ static hb_blend_object_t * hb_blend_init(hb_filter_init_t init, int sub_pix_fmt)
     hb_blend_object_t *blend;
     switch (init.hw_pix_fmt)
     {
-#if defined(__APPLE__)
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case AV_PIX_FMT_VIDEOTOOLBOX:
             blend = &hb_blend_vt;
             break;

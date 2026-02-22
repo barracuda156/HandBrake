@@ -78,6 +78,13 @@ else
     GTK.CONFIGURE.extra += -Dlibdovi=disabled
 endif
 
+ifeq (1,$(FEATURE.vt))
+    GTK.CONFIGURE.extra += -Dvt=enabled
+else
+    GTK.CONFIGURE.extra += -Dvt=disabled
+    GTK.GCC.D += HB_DISABLE_VT
+endif
+
 ifeq (1,$(FEATURE.flatpak))
     GTK.CONFIGURE.extra += -Dflatpak=true
 else

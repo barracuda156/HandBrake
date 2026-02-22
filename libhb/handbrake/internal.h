@@ -459,7 +459,7 @@ extern hb_filter_object_t hb_filter_mt_frame;
 extern hb_filter_object_t hb_filter_colorspace;
 extern hb_filter_object_t hb_filter_format;
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
 extern hb_filter_object_t hb_filter_prefilter_vt;
 extern hb_filter_object_t hb_filter_comb_detect_vt;
 extern hb_filter_object_t hb_filter_yadif_vt;
@@ -476,7 +476,7 @@ extern hb_filter_object_t hb_filter_unsharp_vt;
 extern hb_motion_metric_object_t hb_motion_metric;
 extern hb_blend_object_t hb_blend;
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
 extern hb_motion_metric_object_t hb_motion_metric_vt;
 extern hb_blend_object_t hb_blend_vt;
 #endif

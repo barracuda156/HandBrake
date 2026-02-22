@@ -629,7 +629,7 @@ int hb_buffer_is_writable(const hb_buffer_t *buf)
             return av_frame_is_writable((AVFrame *)buf->storage);
         case STANDARD:
             return 1;
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case COREMEDIA:
             return hb_cv_get_io_surface_usage_count(buf) == 1;
 #endif
@@ -755,7 +755,7 @@ hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
         // into another hardware AVFrame.
         if (frame->hw_frames_ctx)
         {
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
             if (frame->format == AV_PIX_FMT_VIDEOTOOLBOX)
             {
                 buf = hb_vt_buffer_dup(src);
@@ -790,7 +790,7 @@ hb_buffer_t * hb_buffer_dup(const hb_buffer_t *src)
             }
         }
     }
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
     else if (src->storage_type == COREMEDIA)
     {
         buf = hb_vt_buffer_dup(src);

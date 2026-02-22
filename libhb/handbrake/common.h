@@ -1511,7 +1511,9 @@ extern hb_work_object_t hb_decavsub;
 extern hb_work_object_t hb_encavsub;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encqsv;
+#ifndef HB_DISABLE_VT
 extern hb_work_object_t hb_encvt;
+#endif
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_encx265;

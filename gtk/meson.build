@@ -82,6 +82,20 @@ endif
 
 # OS-specific dependencies
 
+if host_machine.system() == 'darwin'
+  darwin_frameworks = ['AudioToolbox', 'CoreAudio', 'DiskArbitration', 'Foundation', 'IOKit']
+  foreach framework: darwin_frameworks
+    ghb_deps += dependency('appleframeworks', modules: framework)
+  endforeach
+  
+  if get_option('vt').enabled()
+    vt_frameworks = ['CoreMedia', 'CoreVideo', 'VideoToolbox']
+    foreach framework: vt_frameworks
+      ghb_deps += dependency('appleframeworks', modules: framework)
+    endforeach
+  endif
+endif
+
 if host_machine.system() == 'windows'
   add_project_link_arguments('-mwindows', language: ['c', 'cpp'])
   win_dlls = ['bcrypt', 'ntdll', 'ole32', 'regex', 'userenv', 'uuid', 'ws2_32']

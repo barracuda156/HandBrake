@@ -1452,6 +1452,10 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-libdovi', dest="enable_libdovi", default=not Tools.cargo.fail and not Tools.cargoc.fail, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-libdovi', dest="enable_libdovi", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
+    # Facilitate compat build for legacy macOS versions.
+    h = 'VideoToolbox/Metal hardware acceleration' if host_tuple.match( '*-*-darwin*' ) else argparse.SUPPRESS
+    grp.add_argument( '--enable-vt', dest="enable_vt", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-vt', dest="enable_vt", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
     cli.add_argument_group( grp )
 
@@ -2098,7 +2102,8 @@ int main()
     doc.add( 'FEATURE.libdovi',    int( options.enable_libdovi ))
 
     if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
-        doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
+        doc.add( 'FEATURE.vt',      int( options.enable_vt ))
+        doc.add( 'FEATURE.xcode',   int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
         if not Tools.xcodebuild.fail and not options.disable_xcode:
             doc.addBlank()
             doc.add( 'XCODE.prefix',  cfg.xcode_prefix_final )

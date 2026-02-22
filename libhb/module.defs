@@ -67,9 +67,19 @@ ifeq ($(HOST.system),cygwin)
     LIBHB.GCC.D += SYS_CYGWIN
 else ifeq ($(HOST.system),darwin)
     LIBHB.GCC.D += SYS_DARWIN
-    LIBHB.c += $(wildcard $(LIBHB.src/)platform/macosx/*.c)
-    LIBHB.m += $(wildcard $(LIBHB.src/)platform/macosx/*.m)
-    LIBHB.metal += $(wildcard $(LIBHB.src/)platform/macosx/shaders/*.metal)
+    LIBHB.GCC.f += AudioToolbox CoreAudio DiskArbitration Foundation IOKit
+
+    ifeq (1,$(FEATURE.vt))
+        # Modern macOS, default.
+        LIBHB.GCC.f += CoreMedia CoreVideo VideoToolbox
+        LIBHB.c += $(wildcard $(LIBHB.src/)platform/macosx/*.c)
+        LIBHB.m += $(wildcard $(LIBHB.src/)platform/macosx/*.m)
+        LIBHB.metal += $(wildcard $(LIBHB.src/)platform/macosx/shaders/*.metal)
+    else
+        LIBHB.GCC.D += HB_DISABLE_VT
+        LIBHB.c += $(LIBHB.src/)platform/macosx/encca_aac.c
+        LIBHB.m += $(LIBHB.src/)platform/macosx/config.m
+    endif
 else ifeq ($(HOST.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(HOST.system),freebsd)

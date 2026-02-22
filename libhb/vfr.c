@@ -77,7 +77,7 @@ static hb_motion_metric_object_t * hb_motion_metric_init(hb_filter_init_t *init)
     hb_motion_metric_object_t *metric;
     switch (init->hw_pix_fmt)
     {
-#if defined(__APPLE__)
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case AV_PIX_FMT_VIDEOTOOLBOX:
             metric = &hb_motion_metric_vt;
             break;

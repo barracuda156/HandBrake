@@ -355,7 +355,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
                 return hb_nvenc_av1_available();
 #endif
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
             case HB_VCODEC_VT_H264:
             case HB_VCODEC_VT_H265:
             case HB_VCODEC_VT_H265_10BIT:
@@ -564,7 +564,7 @@ int hb_str_ends_with(const char *base, const char *str)
 
 static void hb_common_global_hw_init()
 {
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
     hb_register_hwaccel(&hb_hwaccel_videotoolbox);
 #endif
 #if HB_PROJECT_FEATURE_NVDEC
@@ -1745,7 +1745,7 @@ int hb_video_quality_is_supported(uint32_t codec)
 {
     switch (codec)
     {
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
@@ -1773,7 +1773,7 @@ int hb_video_multipass_is_supported(uint32_t codec, int constant_quality)
 {
     switch (codec)
     {
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
@@ -1933,7 +1933,7 @@ const char* const* hb_video_encoder_get_presets(int encoder)
         case HB_VCODEC_X265_16BIT:
             return x265_preset_names;
 #endif
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
@@ -2020,7 +2020,7 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_FFMPEG_VCE_AV1:
             return hb_vce_av1_profile_names;
 #endif
-#if __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
@@ -2074,7 +2074,7 @@ const char* const* hb_video_encoder_get_levels(int encoder)
         case HB_VCODEC_X265_16BIT:
             return hb_h265_level_names;
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
@@ -2228,7 +2228,7 @@ const int* hb_video_encoder_get_pix_fmts(int encoder, const char *profile)
             }
         }
 #endif
-#if __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case HB_VCODEC_VT_H264:
         case HB_VCODEC_VT_H265:
         case HB_VCODEC_VT_H265_10BIT:
@@ -5001,7 +5001,7 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_mt_frame;
             break;
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
         case HB_FILTER_PRE_VT:
             filter = &hb_filter_prefilter_vt;
             break;

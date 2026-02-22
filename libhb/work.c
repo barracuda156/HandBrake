@@ -20,7 +20,7 @@
 #include "handbrake/qsv_common.h"
 #endif
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
 #include "platform/macosx/vt_common.h"
 #endif
 
@@ -1447,7 +1447,7 @@ static enum AVPixelFormat match_pix_fmt(enum AVPixelFormat pix_fmt,
 
 static void sanitize_filter_list_post(hb_job_t *job)
 {
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(HB_DISABLE_VT)
     if (job->hw_pix_fmt == AV_PIX_FMT_VIDEOTOOLBOX)
     {
         hb_vt_setup_hw_filters(job);
