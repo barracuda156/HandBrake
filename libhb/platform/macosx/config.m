@@ -22,38 +22,45 @@ static NSURL * macOS_last_modified_url(NSURL *url1, NSURL* url2)
     NSDate *date2 = nil;
     [presetsUrl2 getResourceValue:&date2 forKey:NSURLAttributeModificationDateKey error:nil];
 
-    return presetsUrl2 && (date1 == nil || [date2 compare:date1] == NSOrderedDescending) ? url2 : url1;
+    // Return url2 if presetsUrl2 exists and date2 is newer than date1 (or date1 is nil)
+    if (presetsUrl2 != nil && (date1 == nil || [date2 compare:date1] == NSOrderedDescending))
+    {
+        return url2;
+    }
+    return url1;
 }
 
 static NSURL * macOS_get_application_support_url()
 {
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSArray<NSURL *> *applicationSupportUrls = [fileManager URLsForDirectory:NSApplicationSupportDirectory
-                                                                   inDomains:NSUserDomainMask];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *applicationSupportUrls = [fileManager URLsForDirectory:NSApplicationSupportDirectory
+                                                           inDomains:NSUserDomainMask];
 
-    NSURL *appSupportURL = applicationSupportUrls.firstObject;
+    NSURL *appSupportURL = [applicationSupportUrls objectAtIndex:0];
 
-    NSArray<NSURL *> *libraryUrls = [fileManager URLsForDirectory:NSLibraryDirectory
-                                                        inDomains:NSUserDomainMask];
+    NSArray *libraryUrls = [fileManager URLsForDirectory:NSLibraryDirectory
+                                                inDomains:NSUserDomainMask];
     NSString *sandboxPath = @"Containers/fr.handbrake.HandBrake/Data/Library/Application Support";
-    NSURL *sandboxAppSupportURL = [libraryUrls.firstObject URLByAppendingPathComponent:sandboxPath isDirectory:YES];
+    NSURL *sandboxAppSupportURL = [[libraryUrls objectAtIndex:0] URLByAppendingPathComponent:sandboxPath isDirectory:YES];
 
     return macOS_last_modified_url(appSupportURL, sandboxAppSupportURL);
 }
 
 int macOS_get_user_config_directory(char path[512])
 {
-    @autoreleasepool
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    NSURL *url = macOS_get_application_support_url();
+
+    if (url == nil)
     {
-        NSURL *url = macOS_get_application_support_url();
-
-        if (url == nil)
-        {
-            return -1;
-        }
-
-        strncpy(path, url.fileSystemRepresentation, 511);
-        path[511] = 0;
-        return 0;
+        [pool release];
+        return -1;
     }
+
+    strncpy(path, [url fileSystemRepresentation], 511);
+    path[511] = 0;
+    
+    [pool release];
+    return 0;
 }
